@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context=".GameBoardActivity" android:background="@color/highlighted_text_material_light">
+
+    <GridView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:id="@+id/gvTiles"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:columnWidth="100dp"
+        android:numColumns="auto_fit" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
+        android:text="New Game"
+        android:id="@+id/btnNewGame"
+        android:layout_below="@+id/gvTiles"
+        android:layout_centerHorizontal="true" />
+
+
+</RelativeLayout>

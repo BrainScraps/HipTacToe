@@ -1,0 +1,102 @@
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+##### ANDROID #####
+
+# built application files
+out/
+*.apk
+*.ap_
+app/app.iml
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Secure keystore settings
+
+secure.properties
+
+
+##### ANDROID #####
+
+##### Gradle ######
+.gradle
+build
+
+# Package Files #
+*.war
+*.ear
+
+##### JAVA #####
+
+##### IntelliJ #####
+
+*.iml
+*.ipr
+*.iws
+.idea/
+.idea/**/
+
+##### IntelliJ #####
+
+##### Eclipse #####
+
+*.pydevproject
+.project
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+.classpath
+.settings/
+.loadpath
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# CDT-specific
+.cproject
+
+# PDT-specific
+.buildpath
+
+##### Eclipse #####
+
+##### Maven #####
+
+target/
+gen-external-apklibs/
+
+##### Maven #####
+
+## OSX ##
+
+.DS_Store
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
