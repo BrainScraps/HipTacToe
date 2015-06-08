@@ -11,18 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 
 public class GameBoardActivity extends ActionBarActivity {
     ArrayList<String> gameBoard;
+    MinimaxBrain brain;
+    TileAdapter adapter;
+    TextView tvWinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,19 +33,52 @@ public class GameBoardActivity extends ActionBarActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         initializeGameBoard();
+        tvWinner = (TextView) findViewById(R.id.tvWinner);
+        Button btnNewGame = (Button) findViewById(R.id.btnNewGame);
+        btnNewGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newGame();
+                adapter.notifyDataSetChanged();
+            }
+        });
+        brain = new MinimaxBrain();
 
-        TileAdapter adapter = new TileAdapter(this, R.layout.board_tile, gameBoard);
+        adapter = new TileAdapter(this, R.layout.board_tile, gameBoard);
         GridView gvTiles = (GridView) findViewById(R.id.gvTiles);
         gvTiles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView textView = (TextView) view.findViewById(R.id.textView);
-                textView.setText("Click");
+
+                if (gameBoard.get(position).equals("")){
+                    markWithX(position, view);
+                    adapter.notifyDataSetChanged();
+                    int currentScore = brain.gameScore(gameBoard);
+                    if (currentScore == brain.BOARD_NOT_FULL){
+                        minimaxBrainTakesTurn();
+                        checkForComputerWin();
+                    } else {
+                        endGame(currentScore);
+                    }
+
+                    adapter.notifyDataSetChanged();
+
+                }
+            }
+
+            private void markWithX(int position, View view){
+                gameBoard.set(position, "X");
             }
         });
         gvTiles.setAdapter(adapter);
 
+    }
 
+    private void checkForComputerWin() {
+        int score = brain.gameScore(gameBoard);
+        if (score == 1){
+            endGame(score);
+        }
     }
 
     @Override
@@ -72,8 +105,40 @@ public class GameBoardActivity extends ActionBarActivity {
 
     public void initializeGameBoard(){
         gameBoard = new ArrayList<>(Arrays.asList("", "", "",
-                                                        "", "", "",
-                                                        "", "", "" ));
+                                                  "", "", "",
+                                                  "", "", "" ));
+    }
+    public void newGame(){
+        tvWinner.setText("");
+        initializeGameBoard();
+    }
+
+    public void endGame(int score){
+        String text;
+        switch (score){
+            case 1:
+                text = "CPU Wins!";
+                break;
+            case -1:
+                text = "YOU Win!";
+                break;
+            case 0:
+                text = "Draw game";
+                break;
+            default:
+                text = "";
+                break;
+        }
+
+        tvWinner.setText(text);
+
+    }
+
+    private void minimaxBrainTakesTurn(){
+        //brain.randomMove(gameBoard);
+        ArrayList<String> afterBrainMoves = new ArrayList( brain.minimaxMove(gameBoard));
+        gameBoard.clear();
+        gameBoard.addAll(afterBrainMoves);
     }
 
     public class TileAdapter extends ArrayAdapter<String> {
@@ -90,6 +155,9 @@ public class GameBoardActivity extends ActionBarActivity {
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
             }
+
+            TextView textView = (TextView) convertView.findViewById(R.id.textView);
+            textView.setText(gameBoard.get(position));
 
             return convertView;
 

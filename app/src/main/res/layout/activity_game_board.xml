@@ -22,5 +22,14 @@
         android:layout_below="@+id/gvTiles"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/tvWinner"
+        android:layout_above="@+id/gvTiles"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="14dp" />
+
 
 </RelativeLayout>
