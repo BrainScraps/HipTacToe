@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context=".GameBoardActivity" android:background="@color/highlighted_text_material_light">
+    android:layout_height="match_parent" tools:context=".GameBoardActivity" android:background="@drawable/hsky">
 
     <GridView
         android:layout_width="300dp"
@@ -14,18 +14,24 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="32dp"
         android:paddingRight="16dp"
         android:paddingLeft="16dp"
         android:text="New Game"
         android:id="@+id/btnNewGame"
         android:layout_below="@+id/gvTiles"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button_bg"
+        android:textColor="#FFF"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="20dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="45dp"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="#FFF"
         android:id="@+id/tvWinner"
         android:layout_above="@+id/gvTiles"
         android:layout_centerHorizontal="true"
@@ -38,6 +44,8 @@
         android:layout_above="@+id/gvTiles"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="26dp"
+        android:indeterminateDrawable="@drawable/progress"
+        android:indeterminateDuration="820"
         android:visibility="invisible"/>
 
 

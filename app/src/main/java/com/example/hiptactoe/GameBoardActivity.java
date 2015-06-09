@@ -76,7 +76,7 @@ public class GameBoardActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 if (gameBoard.get(position).equals("")){
-                    markWithX(position, view);
+                    markWithX(position);
                     adapter.notifyDataSetChanged();
                     int currentScore = brain.gameScore(gameBoard);
                     if (currentScore == brain.BOARD_NOT_FULL) {
@@ -90,7 +90,7 @@ public class GameBoardActivity extends ActionBarActivity {
                 }
             }
 
-            private void markWithX(int position, View view){
+            private void markWithX(int position){
                 gameBoard.set(position, "X");
             }
         });
@@ -221,8 +221,8 @@ public class GameBoardActivity extends ActionBarActivity {
     }
 
     public interface MinimaxAsyncListener {
-        public void onMoveReady(ArrayList result);
+        void onMoveReady(ArrayList result);
 
-        public void onThinking();
+        void onThinking();
     }
 }
