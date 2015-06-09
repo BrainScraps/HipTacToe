@@ -14,7 +14,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="26dp"
         android:paddingRight="16dp"
         android:paddingLeft="16dp"
         android:text="New Game"
@@ -29,7 +29,16 @@
         android:id="@+id/tvWinner"
         android:layout_above="@+id/gvTiles"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="14dp" />
+        android:layout_marginBottom="26dp" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pbThinking"
+        android:layout_above="@+id/gvTiles"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="26dp"
+        android:visibility="invisible"/>
 
 
 </RelativeLayout>

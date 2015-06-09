@@ -3,10 +3,9 @@
     android:orientation="horizontal" android:layout_width="100dp"
     android:layout_height="100dp" android:background="@drawable/tile_bg">
 
-    <TextView
+    <ImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/textView"
-        android:layout_gravity="center_horizontal" />
+        android:scaleType="centerInside"
+        android:id="@+id/ivGameToken"/>
 </LinearLayout>

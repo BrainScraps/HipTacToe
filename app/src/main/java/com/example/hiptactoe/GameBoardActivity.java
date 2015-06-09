@@ -13,7 +13,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -23,6 +26,9 @@ public class GameBoardActivity extends ActionBarActivity {
     MinimaxBrain brain;
     TileAdapter adapter;
     TextView tvWinner;
+    ProgressBar pbThinking;
+    private MinimaxAsyncListener listener;
+    GridView gvTiles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,25 @@ public class GameBoardActivity extends ActionBarActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         initializeGameBoard();
+        pbThinking = (ProgressBar) findViewById(R.id.pbThinking);
+        listener = new MinimaxAsyncListener() {
+            @Override
+            public void onMoveReady(ArrayList result) {
+
+                pbThinking.setVisibility(View.INVISIBLE);
+                gameBoard.clear();
+                gameBoard.addAll(result);
+                adapter.notifyDataSetChanged();
+                adapter.enableAll();
+                checkForComputerWin();
+            }
+
+            @Override
+            public void onThinking() {
+                pbThinking.setVisibility(View.VISIBLE);
+                adapter.disableAll();
+            }
+        };
         tvWinner = (TextView) findViewById(R.id.tvWinner);
         Button btnNewGame = (Button) findViewById(R.id.btnNewGame);
         btnNewGame.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +70,7 @@ public class GameBoardActivity extends ActionBarActivity {
         brain = new MinimaxBrain();
 
         adapter = new TileAdapter(this, R.layout.board_tile, gameBoard);
-        GridView gvTiles = (GridView) findViewById(R.id.gvTiles);
+        gvTiles = (GridView) findViewById(R.id.gvTiles);
         gvTiles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -54,9 +79,8 @@ public class GameBoardActivity extends ActionBarActivity {
                     markWithX(position, view);
                     adapter.notifyDataSetChanged();
                     int currentScore = brain.gameScore(gameBoard);
-                    if (currentScore == brain.BOARD_NOT_FULL){
+                    if (currentScore == brain.BOARD_NOT_FULL) {
                         minimaxBrainTakesTurn();
-                        checkForComputerWin();
                     } else {
                         endGame(currentScore);
                     }
@@ -107,17 +131,27 @@ public class GameBoardActivity extends ActionBarActivity {
         gameBoard = new ArrayList<>(Arrays.asList("", "", "",
                                                   "", "", "",
                                                   "", "", "" ));
+
     }
-    public void newGame(){
+    private void newGame(){
         tvWinner.setText("");
+        adapter.enableAll();
         initializeGameBoard();
+        clearTokens();
+    }
+
+    private void clearTokens() {
+        for(int i=0; i < gameBoard.size(); i++){
+            ImageView iv = (ImageView) gvTiles.getChildAt(i).findViewById(R.id.ivGameToken);
+            iv.setImageResource(android.R.color.transparent);
+        }
     }
 
     public void endGame(int score){
         String text;
         switch (score){
             case 1:
-                text = "CPU Wins!";
+                text = "Bot Wins!";
                 break;
             case -1:
                 text = "YOU Win!";
@@ -131,22 +165,22 @@ public class GameBoardActivity extends ActionBarActivity {
         }
 
         tvWinner.setText(text);
+        adapter.disableAll();
 
     }
 
     private void minimaxBrainTakesTurn(){
-        //brain.randomMove(gameBoard);
-        ArrayList<String> afterBrainMoves = new ArrayList( brain.minimaxMove(gameBoard));
-        gameBoard.clear();
-        gameBoard.addAll(afterBrainMoves);
+        new MinimaxAsyncTask(listener, brain).execute(gameBoard);
     }
 
     public class TileAdapter extends ArrayAdapter<String> {
         private int resource;
+        private boolean clickEnabled;
 
         public TileAdapter(Context context,int resource,  ArrayList<String> tiles) {
             super(context, resource, tiles);
             this.resource = resource;
+            this.clickEnabled = true;
         }
 
         @Override
@@ -155,12 +189,40 @@ public class GameBoardActivity extends ActionBarActivity {
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
             }
+            String token = gameBoard.get(position);
 
-            TextView textView = (TextView) convertView.findViewById(R.id.textView);
-            textView.setText(gameBoard.get(position));
+            ImageView ivGameToken = (ImageView) convertView.findViewById(R.id.ivGameToken);
+            setImageViewSource(token, ivGameToken);
 
             return convertView;
 
         }
+
+        @Override
+        public boolean isEnabled(int position) {
+            return clickEnabled;
+        }
+
+        private void setImageViewSource(String token, ImageView iv){
+            if (token.equals("X")){
+                iv.setImageResource(R.drawable.plane);
+            } else if (token.equals("O")) {
+                iv.setImageResource(R.drawable.hipmunk);
+            }
+        }
+
+        public void disableAll(){
+            clickEnabled = false;
+        }
+
+        public void enableAll(){
+            clickEnabled = true;
+        }
+    }
+
+    public interface MinimaxAsyncListener {
+        public void onMoveReady(ArrayList result);
+
+        public void onThinking();
     }
 }

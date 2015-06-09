@@ -2,31 +2,11 @@ package com.example.hiptactoe;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 
 public class MinimaxBrain {
     private ArrayList<String> tempGameBoard;
 
     final int BOARD_NOT_FULL = -9999 ;
-
-    public MinimaxBrain() {
-    }
-
-    /* unused - previously utilized in testing the UI */
-    public ArrayList<String> randomMove(ArrayList<String> gameBoard) {
-        this.tempGameBoard = gameBoard;
-        ArrayList empties = getEmptyPositions(tempGameBoard);
-        Random rand = new Random();
-
-        // nextInt is normally exclusive of the top value,
-        // so add 1 to make it inclusive
-        int randomNum = rand.nextInt((empties.size()) - 1);
-        int computerMovesHere = (int) empties.get(randomNum);
-        tempGameBoard.set(computerMovesHere, "O");
-
-        return tempGameBoard;
-
-    }
 
     public ArrayList<String> minimaxMove(ArrayList<String> gameBoard){
         this.tempGameBoard = new ArrayList<>(gameBoard);
@@ -38,23 +18,6 @@ public class MinimaxBrain {
         tempGameBoard.set(engineChoice, token);
         return tempGameBoard;
 
-    }
-
-    private boolean computerTurn(ArrayList board) {
-        int exes = Collections.frequency(board, "X");
-        int ohs = Collections.frequency(board, "O");
-        return !(ohs == exes);
-    }
-
-    private ArrayList<Integer> getEmptyPositions(ArrayList board){
-        ArrayList<Integer> empties = new ArrayList<>();
-        for (int i = 0; i < board.size(); i++) {
-            String currentString = (String) board.get(i);
-            if (currentString.equals("")) {
-                empties.add(i);
-            }
-        }
-        return empties;
     }
 
     public int gameScore(ArrayList board) {
@@ -92,6 +55,23 @@ public class MinimaxBrain {
 
     private boolean emptySpaces(ArrayList board) {
         return board.indexOf("") != -1;
+    }
+
+    private boolean computerTurn(ArrayList board) {
+        int exes = Collections.frequency(board, "X");
+        int ohs = Collections.frequency(board, "O");
+        return !(ohs == exes);
+    }
+
+    private ArrayList<Integer> getEmptyPositions(ArrayList board){
+        ArrayList<Integer> empties = new ArrayList<>();
+        for (int i = 0; i < board.size(); i++) {
+            String currentString = (String) board.get(i);
+            if (currentString.equals("")) {
+                empties.add(i);
+            }
+        }
+        return empties;
     }
 
     private class MinimaxEngine {
