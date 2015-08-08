@@ -151,13 +151,13 @@ public class GameBoardActivity extends ActionBarActivity {
         String text;
         switch (score){
             case 1:
-                text = "Bot Wins!";
+                text = "Taytay Wins!";
                 break;
             case -1:
-                text = "YOU Win!";
+                text = "Katy Wins!";
                 break;
             case 0:
-                text = "Draw game";
+                text = "Bad Blood (Draw)";
                 break;
             default:
                 text = "";
@@ -205,9 +205,9 @@ public class GameBoardActivity extends ActionBarActivity {
 
         private void setImageViewSource(String token, ImageView iv){
             if (token.equals("X")){
-                iv.setImageResource(R.drawable.plane);
+                iv.setImageResource(R.drawable.katy);
             } else if (token.equals("O")) {
-                iv.setImageResource(R.drawable.hipmunk);
+                iv.setImageResource(R.drawable.taylor);
             }
         }
 
